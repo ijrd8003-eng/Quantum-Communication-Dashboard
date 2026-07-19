@@ -1,0 +1,10 @@
+Flask>=2.0.0
+Qiskit>=1.0.0
+Qiskit-Aer
+matplotlib
+networkx>=3.0
+numpy
+pandas
+pillow
+pulatexenc
+scikit-learn>=0.24.0

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Communication Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <span>⚛️</span> Quantum Lab
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item active" data-tab="overview">
+                <a href="#overview"><span>🏠</span> Overview</a>
+            </li>
+            <li class="nav-item" data-tab="bell">
+                <a href="#bell"><span>🔔</span> Bell States</a>
+            </li>
+            <li class="nav-item" data-tab="entanglement">
+                <a href="#entanglement"><span>🔗</span> Entanglement</a>
+            </li>
+            <li class="nav-item" data-tab="teleportation">
+                <a href="#teleportation"><span>🚀</span> Teleportation</a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <header class="top-header">
+            <h1 id="page-title">Dashboard Overview</h1>
+            <div class="date-badge" id="current-time">Quantum Lab Console</div>
+        </header>
+
+        <!-- OVERVIEW TAB -->
+        <section id="overview-tab" class="tab-panel active">
+            <div class="concept-showcase">
+                <div class="concept-details">
+                    <div>
+                        <h2>Welcome to the Quantum Communication Dashboard</h2>
+                        <p>
+                            Explore key concepts of quantum communication through active simulation. Using IBM Qiskit and the Aer Simulator, you can construct circuits, simulate their execution locally, and view both the circuit configurations and resulting measurement probability distributions.
+                        </p>
+                        <p>
+                            Select one of the simulation modules below or from the sidebar to begin building circuits, measuring outcomes, and reviewing the terminal results in real-time.
+                        </p>
+                    </div>
+                    <div class="action-bar">
+                        <button class="btn-simulate" onclick="switchTab('bell')">Get Started ➔</button>
+                    </div>
+                </div>
+                <div class="concept-illustration-card">
+                    <img src="{{ url_for('static', filename='images/bell_states_concept.png') }}" alt="Quantum Computing Overview">
+                </div>
+            </div>
+
+            <div class="overview-grid">
+                <div class="overview-card" onclick="switchTab('bell')">
+                    <div class="card-icon">🔔</div>
+                    <h3>Bell States</h3>
+                    <p>Create maximally entangled quantum states of two qubits. Experiment with creating and measuring the $|\Phi^+\rangle$ state.</p>
+                </div>
+                <div class="overview-card" onclick="switchTab('entanglement')">
+                    <div class="card-icon">🔗</div>
+                    <h3>Entanglement</h3>
+                    <p>Understand the foundational quantum mechanism. Run circuits that establish a correlation between two qubits such that their states are co-dependent.</p>
+                </div>
+                <div class="overview-card" onclick="switchTab('teleportation')">
+                    <div class="card-icon">🚀</div>
+                    <h3>Teleportation</h3>
+                    <p>Transfer quantum state information across space using a shared EPR pair and classical channels without physically transmitting the qubit itself.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BELL STATES TAB -->
+        <section id="bell-tab" class="tab-panel">
+            <div class="concept-showcase">
+                <div class="concept-details">
+                    <div>
+                        <h2>Bell States</h2>
+                        <p>
+                            A Bell State is a specific quantum state of two qubits representing the simplest and most fundamental example of maximal quantum entanglement. In this lab, we build the state:
+                        </p>
+                        <div class="quantum-math">
+                            |\Phi^+\rangle = \frac{1}{\sqrt{2}} (|00\rangle + |11\rangle)
+                        </div>
+                        <p>
+                            Applying a Hadamard gate ($H$) on the first qubit puts it into superposition, and a Controlled-NOT ($CNOT$) gate with the first qubit as control and the second as target entangles them. Measurements on both qubits will yield correlated results ($00$ or $11$) with a 50% probability each.
+                        </p>
+                    </div>
+                    <div class="action-bar">
+                        <button class="btn-simulate" id="btn-simulate-bell" onclick="runQuantumSimulation('bell')">
+                            <span>⚡</span> Run Bell Simulation
+                        </button>
+                    </div>
+                </div>
+                <div class="concept-illustration-card">
+                    <img src="{{ url_for('static', filename='images/bell_states_concept.png') }}" alt="Bell States Concept">
+                </div>
+            </div>
+
+            <!-- Simulation Results (Dynamic) -->
+            <div class="simulation-results-container">
+                <div class="visualization-grid">
+                    <div class="vis-card">
+                        <h4>📁 Quantum Circuit Diagram</h4>
+                        <div class="vis-placeholder" id="bell-circuit-placeholder">
+                            <span>📐</span>
+                            <p>Circuit diagram will appear after simulation runs.</p>
+                        </div>
+                        <img src="" id="bell-circuit-img" class="vis-image" style="display:none;" alt="Bell Circuit">
+                    </div>
+                    <div class="vis-card">
+                        <h4>📊 Probability Distribution Graph</h4>
+                        <div class="vis-placeholder" id="bell-histogram-placeholder">
+                            <span>📈</span>
+                            <p>Measurement histogram will appear after simulation runs.</p>
+                        </div>
+                        <img src="" id="bell-histogram-img" class="vis-image" style="display:none;" alt="Bell Histogram">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ENTANGLEMENT TAB -->
+        <section id="entanglement-tab" class="tab-panel">
+            <div class="concept-showcase">
+                <div class="concept-details">
+                    <div>
+                        <h2>Quantum Entanglement</h2>
+                        <p>
+                            Quantum Entanglement is a phenomenon where two or more particles become correlated in such a way that the quantum state of each particle cannot be described independently of the others.
+                        </p>
+                        <div class="quantum-math">
+                            \text{Entangling Qubits: } H(q_0) \rightarrow CNOT(q_0, q_1)
+                        </div>
+                        <p>
+                            This creates a unified system. When you measure qubit 0, its wavefunction collapses, immediately forcing qubit 1 to collapse into the exact same corresponding state, regardless of the distance between them. This violates classical intuition and is the foundation for quantum communication.
+                        </p>
+                    </div>
+                    <div class="action-bar">
+                        <button class="btn-simulate" id="btn-simulate-entanglement" onclick="runQuantumSimulation('entanglement')">
+                            <span>⚡</span> Run Entanglement Simulation
+                        </button>
+                    </div>
+                </div>
+                <div class="concept-illustration-card">
+                    <img src="{{ url_for('static', filename='images/entanglement_concept.png') }}" alt="Entanglement Concept">
+                </div>
+            </div>
+
+            <!-- Simulation Results (Dynamic) -->
+            <div class="simulation-results-container">
+                <div class="visualization-grid">
+                    <div class="vis-card">
+                        <h4>📁 Quantum Circuit Diagram</h4>
+                        <div class="vis-placeholder" id="entanglement-circuit-placeholder">
+                            <span>📐</span>
+                            <p>Circuit diagram will appear after simulation runs.</p>
+                        </div>
+                        <img src="" id="entanglement-circuit-img" class="vis-image" style="display:none;" alt="Entanglement Circuit">
+                    </div>
+                    <div class="vis-card">
+                        <h4>📊 Probability Distribution Graph</h4>
+                        <div class="vis-placeholder" id="entanglement-histogram-placeholder">
+                            <span>📈</span>
+                            <p>Measurement histogram will appear after simulation runs.</p>
+                        </div>
+                        <img src="" id="entanglement-histogram-img" class="vis-image" style="display:none;" alt="Entanglement Histogram">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TELEPORTATION TAB -->
+        <section id="teleportation-tab" class="tab-panel">
+            <div class="concept-showcase">
+                <div class="concept-details">
+                    <div>
+                        <h2>Quantum Teleportation</h2>
+                        <p>
+                            Quantum Teleportation is a protocol to transmit a quantum state (an unknown qubit $|\psi\rangle$) from Alice to Bob. It uses classical bits and a pre-shared entangled pair (EPR pair).
+                        </p>
+                        <div class="quantum-math">
+                            \text{Teleport: } |\psi\rangle = \alpha|0\rangle + \beta|1\rangle \quad (\text{Qubit } q_0 \rightarrow q_2)
+                        </div>
+                        <p>
+                            Alice and Bob first share an entangled state. Alice performs a Bell measurement on the target qubit and her half of the entangled pair. She sends the two classical measurement outcomes to Bob, who performs corresponding corrections ($X$ or $Z$) to reconstruct the original state $|\psi\rangle$ on his qubit.
+                        </p>
+                    </div>
+                    <div class="action-bar">
+                        <button class="btn-simulate" id="btn-simulate-teleportation" onclick="runQuantumSimulation('teleportation')">
+                            <span>⚡</span> Run Teleportation Simulation
+                        </button>
+                    </div>
+                </div>
+                <div class="concept-illustration-card">
+                    <img src="{{ url_for('static', filename='images/teleportation_concept.png') }}" alt="Teleportation Concept">
+                </div>
+            </div>
+
+            <!-- Simulation Results (Dynamic) -->
+            <div class="simulation-results-container">
+                <div class="visualization-grid">
+                    <div class="vis-card">
+                        <h4>📁 Quantum Circuit Diagram</h4>
+                        <div class="vis-placeholder" id="teleportation-circuit-placeholder">
+                            <span>📐</span>
+                            <p>Circuit diagram will appear after simulation runs.</p>
+                        </div>
+                        <img src="" id="teleportation-circuit-img" class="vis-image" style="display:none;" alt="Teleportation Circuit">
+                    </div>
+                    <div class="vis-card">
+                        <h4>📊 Probability Distribution Graph</h4>
+                        <div class="vis-placeholder" id="teleportation-histogram-placeholder">
+                            <span>📈</span>
+                            <p>Measurement histogram will appear after simulation runs.</p>
+                        </div>
+                        <img src="" id="teleportation-histogram-img" class="vis-image" style="display:none;" alt="Teleportation Histogram">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quantum Console / Terminal -->
+        <section class="terminal-card" id="terminal-section" style="margin-top: 30px;">
+            <div class="terminal-header">
+                <div class="terminal-title">
+                    <span>💻</span> quantum-terminal &mdash; aer-simulator@quantum-lab
+                </div>
+                <div class="terminal-dots">
+                    <span class="terminal-dot dot-red"></span>
+                    <span class="terminal-dot dot-yellow"></span>
+                    <span class="terminal-dot dot-green"></span>
+                </div>
+            </div>
+            <div class="terminal-body" id="terminal-body">
+                <p><span class="t-prompt">quantum-lab@aer-simulator:~$</span> echo "System initialized. Select a lab tab and run the simulation."</p>
+                <p class="t-text">System initialized. Select a lab tab and run the simulation.</p>
+                <p><span class="t-prompt">quantum-lab@aer-simulator:~$</span> <span class="cursor"></span></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
