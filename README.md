@@ -111,8 +111,4 @@ The test script validates all implemented quantum protocols and prints the corre
 * Real-time backend terminal logs
 * Responsive and modern user interface
 
----
 
-## 📜 License
-
-This project is licensed under the **MIT License**. Feel free to use, modify, and extend it for educational and research purposes.
